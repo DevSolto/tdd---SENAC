@@ -1,0 +1,63 @@
+CICLO TDD - Sistema de Carrinho de Compras
+==========================================
+
+RED → GREEN → REFACTOR
+-----------------------
+
+## RED (teste falha primeiro)
+
+Antes de qualquer implementação, os testes são escritos para comportamentos ainda
+não existentes. Exemplos de testes que falhariam inicialmente:
+
+- test_adicionar_item_preco_negativo_levanta_erro
+  → falha porque CarrinhoDeCompras nem existe ainda.
+
+- test_calcular_total_carrinho_vazio
+  → falha porque o método calcular_total() não foi implementado.
+
+- test_aplicar_desconto_acima_do_limite_levanta_erro
+  → falha porque não há validação de limite de desconto.
+
+## GREEN (mínimo para passar)
+
+Implementa-se o mínimo necessário em carrinho.py para cada teste passar:
+
+- adicionar_item: valida preco >= 0 e quantidade > 0, acumula no dicionário.
+- remover_item: verifica existência e deleta do dicionário.
+- calcular_total: percorre _itens somando preco * quantidade.
+- aplicar_desconto: valida 0 <= percentual <= 20, aplica sobre o total.
+
+## REFACTOR (melhorar sem quebrar)
+
+Melhorias aplicadas após os testes passarem:
+
+1. Uso de dicionário interno (_itens) em vez de lista → busca O(1).
+2. Método listar_itens() retorna cópia (dict(self._itens)) para evitar
+   mutação externa do estado interno.
+3. Lógica de incremento de quantidade centralizada em adicionar_item,
+   eliminando duplicação de código.
+4. Mensagens de erro descritivas no KeyError e ValueError.
+
+Todos os 12 testes continuam passando após a refatoração.
+
+## Evidência de execução
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.3
+
+test_carrinho.py::test_adicionar_item_simples                        PASSED
+test_carrinho.py::test_adicionar_item_incrementa_quantidade          PASSED
+test_carrinho.py::test_adicionar_item_preco_negativo_levanta_erro    PASSED
+test_carrinho.py::test_adicionar_item_quantidade_zero_levanta_erro   PASSED
+test_carrinho.py::test_remover_item_existente                        PASSED
+test_carrinho.py::test_remover_item_inexistente_levanta_erro         PASSED
+test_carrinho.py::test_calcular_total_carrinho_vazio                 PASSED
+test_carrinho.py::test_calcular_total_correto                        PASSED
+test_carrinho.py::test_aplicar_desconto_valido                       PASSED
+test_carrinho.py::test_aplicar_desconto_maximo                       PASSED
+test_carrinho.py::test_aplicar_desconto_acima_do_limite_levanta_erro PASSED
+test_carrinho.py::test_aplicar_desconto_negativo_levanta_erro        PASSED
+
+============================== 12 passed in 0.02s ==============================
+
+Relatório HTML completo disponível em: relatorio.html
